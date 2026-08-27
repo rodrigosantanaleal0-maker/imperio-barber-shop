@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 750" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#252525" />
+      <stop offset="100%" stop-color="#050505" />
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="35%" r="45%">
+      <stop offset="0%" stop-color="#e3c766" stop-opacity="0.18" />
+      <stop offset="100%" stop-color="#e3c766" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="600" height="750" fill="url(#bg)" />
+  <rect width="600" height="750" fill="url(#glow)" />
+  <g stroke="#c9a227" stroke-width="1.4" fill="none" opacity="0.5">
+    <circle cx="300" cy="280" r="95" />
+    <path d="M150 620 q150 -140 300 0 v40 h-300 z" />
+  </g>
+  <text x="300" y="700" text-anchor="middle" font-family="Georgia, serif" font-size="16" letter-spacing="5" fill="#c9a227" opacity="0.4">IMPERIO</text>
+</svg>
