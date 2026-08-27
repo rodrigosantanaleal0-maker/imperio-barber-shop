@@ -2,6 +2,8 @@
 // Depois de estabilizado, trocar por:
 //   npx supabase gen types typescript --project-id wfbxgevazeczpzsxxypa > src/domain/types/database.ts
 
+export type StaffRole = "barber" | "admin";
+
 export type AppointmentStatus =
   | "pending_payment"
   | "confirmed"
@@ -21,6 +23,11 @@ type BuildTable<Row, Insert, Update> = {
 export type Database = {
   public: {
     Tables: {
+      profiles: BuildTable<
+        { id: string; full_name: string; role: StaffRole; created_at: string },
+        { id: string; full_name: string; role: StaffRole },
+        { full_name?: string; role?: StaffRole }
+      >;
       customers: BuildTable<
         { id: string; full_name: string; phone: string; email: string | null; created_at: string },
         { id?: string; full_name: string; phone: string; email?: string | null },
@@ -34,6 +41,7 @@ export type Database = {
           bio: string | null;
           specialties: string[];
           active: boolean;
+          profile_id: string | null;
           created_at: string;
         },
         {
@@ -43,8 +51,16 @@ export type Database = {
           bio?: string | null;
           specialties?: string[];
           active?: boolean;
+          profile_id?: string | null;
         },
-        { full_name?: string; avatar_url?: string | null; bio?: string | null; specialties?: string[]; active?: boolean }
+        {
+          full_name?: string;
+          avatar_url?: string | null;
+          bio?: string | null;
+          specialties?: string[];
+          active?: boolean;
+          profile_id?: string | null;
+        }
       >;
       services: BuildTable<
         {
@@ -140,7 +156,7 @@ export type Database = {
           updated_at: string;
         },
         never,
-        never
+        { status?: AppointmentStatus }
       >;
       payments: BuildTable<
         {
@@ -217,6 +233,42 @@ export type Database = {
       find_appointment_public: {
         Args: { p_phone: string; p_code: string };
         Returns: Database["public"]["Tables"]["appointments"]["Row"];
+      };
+      barber_update_appointment_status: {
+        Args: { p_appointment_id: string; p_status: "completed" | "no_show" };
+        Returns: Database["public"]["Tables"]["appointments"]["Row"];
+      };
+      admin_dashboard_totals: {
+        Args: { p_from: string; p_to: string };
+        Returns: {
+          revenue_cents: number;
+          appointments_count: number;
+          completed_count: number;
+          canceled_count: number;
+          no_show_count: number;
+          new_customers_count: number;
+        }[];
+      };
+      admin_revenue_by_day: {
+        Args: { p_from: string; p_to: string };
+        Returns: { day: string; revenue_cents: number }[];
+      };
+      admin_appointments_by_status: {
+        Args: { p_from: string; p_to: string };
+        Returns: { status: AppointmentStatus; count: number }[];
+      };
+      admin_top_services: {
+        Args: { p_from: string; p_to: string; p_limit?: number };
+        Returns: { service_id: string; service_name: string; count: number; revenue_cents: number }[];
+      };
+      admin_barber_performance: {
+        Args: { p_from: string; p_to: string };
+        Returns: {
+          barber_id: string;
+          barber_name: string;
+          appointments_count: number;
+          revenue_cents: number;
+        }[];
       };
     };
     Enums: Record<string, never>;
