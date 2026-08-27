@@ -111,7 +111,7 @@ export function Hero() {
   return (
     <section id="top" className="relative border-b border-smoke">
       <div ref={wrapRef} className="relative" style={{ height: reducedMotion ? undefined : "600vh" }}>
-        <div className="sticky top-0 h-screen w-full overflow-hidden bg-obsidian">
+        <div className="sticky top-0 relative h-screen w-full overflow-hidden bg-obsidian">
           <Image
             src="/images/placeholder/scene.svg"
             alt=""
