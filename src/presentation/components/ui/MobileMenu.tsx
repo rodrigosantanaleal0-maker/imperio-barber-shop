@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { X } from "lucide-react";
 import { BookingCTA } from "@/presentation/components/ui/BookingCTA";
+import { useMounted } from "@/application/hooks/useMounted";
 import type { NavLink } from "@/domain/types/site";
 
 interface MobileMenuProps {
@@ -14,6 +16,7 @@ interface MobileMenuProps {
 
 export function MobileMenu({ open, onClose, links }: MobileMenuProps) {
   const closeRef = useRef<HTMLButtonElement>(null);
+  const mounted = useMounted();
 
   useEffect(() => {
     if (!open) return;
@@ -31,7 +34,9 @@ export function MobileMenu({ open, onClose, links }: MobileMenuProps) {
     };
   }, [open, onClose]);
 
-  return (
+  if (!mounted) return null;
+
+  return createPortal(
     <div
       role="dialog"
       aria-modal="true"
@@ -67,6 +72,7 @@ export function MobileMenu({ open, onClose, links }: MobileMenuProps) {
           Agendar
         </BookingCTA>
       </nav>
-    </div>
+    </div>,
+    document.body,
   );
 }
